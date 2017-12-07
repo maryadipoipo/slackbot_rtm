@@ -1,0 +1,22 @@
+{
+  "name": "slackbotrtm",
+  "version": "1.0.0",
+  "description": "playing with slackbotrtm using node.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HyosokaPoipo/slackbot_rtm.git"
+  },
+  "keywords": [
+    "slackbot_rtm"
+  ],
+  "author": "HyosokaPoipo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HyosokaPoipo/slackbot_rtm/issues"
+  },
+  "homepage": "https://github.com/HyosokaPoipo/slackbot_rtm#readme"
+}
