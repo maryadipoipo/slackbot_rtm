@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/HyosokaPoipo/slackbot_rtm/issues"
   },
-  "homepage": "https://github.com/HyosokaPoipo/slackbot_rtm#readme"
+  "homepage": "https://github.com/HyosokaPoipo/slackbot_rtm#readme",
+  "dependencies": {
+    "@slack/client": "^3.14.2"
+  }
 }
