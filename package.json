@@ -22,6 +22,7 @@
   "homepage": "https://github.com/HyosokaPoipo/slackbot_rtm#readme",
   "dependencies": {
     "@slack/client": "^3.14.2",
+    "mongodb": "^3.0.0-rc0",
     "node-env-file": "^0.1.8"
   }
 }
