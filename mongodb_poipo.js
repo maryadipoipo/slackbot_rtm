@@ -142,22 +142,39 @@ module.exports = {
                 });
         })
     },
-    get_remain_karma_points: function(i_user_id) {
+    get_remain_karma_points: function(i_slack_id) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
 
             var dbase = db.db(process.env.MONGODB_DATABASE);
-            var query = { user_id: i_user_id };
+            var query = { slack_id: i_slack_id };
 
-            dbase.collection(process.env.MONGODB_COLLECTION).find(query).toArray(function(err, result) {
+            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+            .find(query)
+            .toArray(function(err, result) {
                 console.log(" remain karma points : ");
                 console.log(result);
             });
         })
     },
 
-    show_top_10:function() {
+    show_top_10:function(i_rtm, i_slack_team_id) {
+        MongoClient..connect(url, function(err, db){
+            if (err) throw err;
 
+            var dbase = db.db(process.env.MONGODB_DATABASE);
+            var query = {
+                slack_team_id: i_slack_team_id
+            }
+
+            dbase.collection(MONGODB_COLLECTION_USERS)
+            .find(query)
+            .sort({total_point: -1}) //Descending, 1 = Ascending
+            .limit(10)
+            .toArray(function(err, res){
+
+            });
+        });
     }
 
 }
