@@ -228,16 +228,13 @@ module.exports = {
                         .limit(10)
                         .toArray(function(err, res){
                             if(res.length > 0) {
-                                res1 = [];
+                                res1 = "";
                                 res.forEach(function(item) {
-                                    temp = {
-                                        name : item.slack_name,
-                                        point : item.total_point
-                                    }
-                                    res1.push(temp);
+                                    res1 = res1+item.slack_name+" : "+ item.total_point+" points \n";
                                 });
+                                console.log(res1);
                                 i_rtm.sendMessage(
-                                    res1,
+                                    res1.toString(),
                                     obj_message.channel
                                     );
 
@@ -277,10 +274,11 @@ module.exports = {
             dbase.collection(process.env.MONGODB_COLLECTION_USERS)
                 .find({slack_id: obj_message.user})
                 .toArray(function(err, result){
-                    //console.log(result[].);
-                    if(result.length > 3) {
+                    console.log(result);
+                    if(result.length > 0) {
                         i_rtm.sendMessage(
-                            result[0],
+                            "Your total point : "+ result[0].total_point+
+                            "\n Your remain points to give : "+result[0].given_point,
                             obj_message.channel
                         );
                     }else{
