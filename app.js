@@ -38,26 +38,56 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
 // });
 
 
-/*** For detecting message in channel ***/
+/*** For detecting message in channel, DM, and GM ***/
 rtm.on(RTM_EVENTS.MESSAGE, function(message) {
     console.log("MESSAGE");
     console.log(message);
-    // Check message content
-    if(message.text.indexOf('<@U8AEJ3DGC> leaderboard') >= 0) {
-      // Show top 10 karma point
-      console.log("leaderboard detected...");
-      mongo_poipo.show_top_10_karma_users_point(rtm, message);
+    switch(message.channel.charAt(0)) {
+      case 'C':
+        //Public channel
+        // Check message content
+        if(message.text.indexOf('<@U8AEJ3DGC> leaderboard') >= 0) {
+          // Show top 10 karma point
+          console.log("leaderboard detected...");
+          mongo_poipo.show_top_10_karma_users_point(rtm, message);
 
-    }else if(message.text.indexOf('thanks <@') >= 0){
-      // Check Thanks
-      commands_poipo.thanks_filter(rtm, message);
+        }else if(message.text.indexOf('thanks <@') >= 0){
+          // Check Thanks
+          commands_poipo.thanks_filter(rtm, message);
+        }
+      break;
+      case 'D':
+        //Direct Message
+        if(message.text.indexOf('karma') >= 0) {
+              console.log("karma command detected");
+              mongo_poipo.get_karma_user_info(rtm, message);
+            }
+      break;
+
+      case 'G':
+        //Group Message:
+        console.log("group message detected...");
+      break;
+
+      case 'W':
+        //Private channel
+        console.log("private channel message detected...");
+      break;
+
+      default: //Just do nothing
     }
+
 });
 
 /*** For detecting DM ***/
 rtm.on(RTM_EVENTS.IM_OPEN, function(message) {
     console.log("IM_OPEN");
     console.log(message);
+    console.log(message.text.indexOf('karma'));
+    if(message.text.indexOf('karma') >= 0) {
+      console.log("karma command detected");
+      mongo_poipo.get_karma_user_info(rtm, message);
+    }
 });
 
 

@@ -207,11 +207,47 @@ module.exports = {
                                 );
                             }
                             db.close();
+                            console.log("leaderboard finish");
                         });
                     } else {
                         console.log('boot is not in this channel');
                     }
 
+                });
+        });
+    },
+
+    get_karma_user_info: function(i_rtm, obj_message){
+        /***
+            obj_message content example :
+            { type: 'message',
+              channel: 'D8AD8CCAE',
+              user: 'U89MZ4PV2', ==> slack_id
+              text: 'karma',      ==> command that should be detected
+              ts: '1512965076.000109',
+              source_team: 'T895HCY8H',
+              team: 'T895HCY8H' ==> slack team id
+            }
+        ***/
+        MongoClient.connect(url, function(err, db){
+            if (err) throw err;
+
+            var dbase = db.db(process.env.MONGODB_DATABASE);
+            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+                .find({slack_id: obj_message.user})
+                .toArray(function(err, result){
+                    //console.log(result[].);
+                    if(result.length > 3) {
+                        i_rtm.sendMessage(
+                            result[0],
+                            obj_message.channel
+                        );
+                    }else{
+                        i_rtm.sendMessage(
+                            "Sorry, I couldn't find any data for you... :(",
+                            obj_message.channel
+                        );
+                    }
                 });
         });
     },
