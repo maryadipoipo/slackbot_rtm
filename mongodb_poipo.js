@@ -253,7 +253,38 @@ module.exports = {
     },
 
     give_5_point_everyday: function() {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
 
+            var dbase = db.db(process.env.MONGODB_DATABASE);
+            dbase.collection(process.env.MONGODB_COLLECTION_USERS_TEST)
+            .find() // find all data in collection
+            .toArray(function(err, result) {
+                console.log("give 5 point");
+                for(i = 0; i< result.length; i++) {
+                    var query = {slack_id: result[i].slack_id};
+                    var new_point = {
+                        slack_id: result[i].slack_id,
+                        slack_name: result[i].slack_name,
+                        total_point: result[i].total_point,
+                        received_point: result[i].received_point,
+                        //given_point: result[i].given_point-1,
+                        given_point: 5,
+                        slack_team_id: result[i].slack_team_id,
+                        is_deleted: result[i].is_deleted
+                    };
+                    dbase.collection(process.env.MONGODB_COLLECTION_USERS_TEST)
+                        .update(query, new_point, function(err, res) {
+                            if (err) throw err;
+                            console.log("data has been updated");
+                            //console.log(res);
+                        });
+                    if(i == result.length-1) {
+                        db.close();
+                    }
+                }
+            });
+        });
     }
 
 }

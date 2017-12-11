@@ -21,8 +21,6 @@ module.exports = {
                 );
             }
         });
-
         console.log(arr);
-
     }
 }

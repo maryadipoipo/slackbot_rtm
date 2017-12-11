@@ -4,7 +4,7 @@ var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 var my_env = require('node-env-file');
 var mongo_poipo = require('./mongodb_poipo');
 var commands_poipo = require('./karma_poipo_commands');
-
+var cron_poipo = require('./cron_poipo')
 
 
 /*** Load ENV ***/
@@ -26,6 +26,11 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
   	  }
   }
   console.log(`Logged in as ${rtmStartData.self.name} of team ${rtmStartData.team.name}`);
+
+  //mongo_poipo.give_5_point_everyday();
+
+  /*** Running cron job at 00:00 ***/
+  cron_poipo.give_5_points_cron;
 });
 /***************************************/
 
