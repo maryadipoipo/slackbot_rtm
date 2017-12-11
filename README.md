@@ -64,14 +64,12 @@ Give an example
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Planned to deploy to [zeit](https://zeit.co/now) & [heroku](https://dashboard.heroku.com)
 
 ## Built With
 
-* [Node.js](https://nodejs.org/en/) - The web framework used
-* [MongoDB](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
+* [Node.js](https://nodejs.org/en/) - Main programming languange
+* [MongoDB](https://www.mongodb.com/) - Database
 
 ## Versioning
 
