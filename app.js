@@ -27,10 +27,8 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
   }
   console.log(`Logged in as ${rtmStartData.self.name} of team ${rtmStartData.team.name}`);
 
-  //mongo_poipo.give_5_point_everyday();
-
   /*** Running cron job at 00:00 ***/
-  cron_poipo.give_5_points_cron;
+  cron_poipo.give_5_points_cron();
 });
 /***************************************/
 
