@@ -53,9 +53,11 @@ module.exports = {
             dbase.collection(process.env.MONGODB_COLLECTION_INVITED_CHANNELS)
                 .find(query)
                 .toArray(function(err, result) {
-                    if(result.length > 1) {
+                    console.log("handle_thanks_filter_mongo");
+                    console.log(result);
+                    if(result[0].slack_channel_member_ids.length > 1) {
                         /** Check member is in group or not **/
-                        if(result.slack_channel_member_ids.includes(thanked_slack_id)) {
+                        if(result[0].slack_channel_member_ids.includes(thanked_slack_id)) {
                             // Check remaining given_point in karma_poipo_users
                             var thanker_user_query = {
                                 slack_id : obj_channel.user
@@ -63,7 +65,7 @@ module.exports = {
                             dbase.collection(process.env.MONGODB_COLLECTION_USERS)
                                 .find(thanker_user_query)
                                 .toArray(function(err, res0) {
-                                    if(res0.given_point > 0) {
+                                    if(res0[0].given_point > 0) {
                                         // Give one point to thanked user
                                         var thanked_user_query = {
                                             slack_id : thanked_slack_id
@@ -71,8 +73,8 @@ module.exports = {
                                         dbase.collection(process.env.MONGODB_COLLECTION_USERS)
                                         .find(thanked_user_query)
                                         .toArray(function(err, res) {
-                                            var updated_total_point = res.total_point + 1;
-                                            var updated_point_today = res.received_point + 1;
+                                            var updated_total_point = res[0].total_point + 1;
+                                            var updated_point_today = res[0].received_point + 1;
                                             var new_thanked_user_data = {
                                                 total_point: updated_total_point,
                                                 received_point: updated_point_today,
@@ -91,7 +93,7 @@ module.exports = {
 
                                             // Decrease one karma point from thanker
                                             var new_thanker_user_data = {
-                                                given_point : res0.given_point - 1,
+                                                given_point : res0[0].given_point - 1,
                                                 slack_team_id: obj_channel.team
                                             };
                                             dbase.collection(process.env.MONGODB_COLLECTION_USERS)
@@ -107,7 +109,7 @@ module.exports = {
 
                                             // Send success response
                                             i_rtm.sendMessage(
-                                                res.slack_name+" receives 1 point from "+ res0.slack_name
+                                                res[0].slack_name+" receives 1 point from "+ res0[0].slack_name
                                                 +". He/She has "+updated_total_point+" points",
                                                 obj_channel.channel
                                             );
@@ -115,12 +117,13 @@ module.exports = {
                                     }else {
                                         // Send response that given point is already null
                                         i_rtm.sendMessage(
-                                            res0.slack_name+" doesn't have any point to give",
+                                            res0[0].slack_name+" doesn't have any point to give",
                                             obj_channel.channel
                                         );
                                     }
                                 });
                         }else {
+                            console.log("user is not in group yet");
                             // Send response that thanked user is not in the channel
                             var thanked_user_query = {
                                 slack_id : thanked_slack_id
@@ -129,7 +132,7 @@ module.exports = {
                             .find(thanked_user_query)
                             .toArray(function(err, res) {
                                 i_rtm.sendMessage(
-                                    res.slack_name+" is not yet in this channel",
+                                    res[0].slack_name+" is not yet in this channel. Please invite him/her to give a karma point",
                                     obj_channel.channel
                                 );
                             });
