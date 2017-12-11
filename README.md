@@ -7,7 +7,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-* Provide a mongo database in [mlab](https://mlab.com/). Please create 3 collection from there and put database and collction info to your .env
+* Provide a mongo database in [mlab](https://mlab.com/). Please create 3 collection from there and put database and collction info to your .env file
 
 ```
 MONGODB_USER=your_mongo_user
@@ -18,7 +18,7 @@ MONGODB_COLLECTION_TEAMS=your_mongo_team_collection
 MONGODB_COLLECTION_INVITED_CHANNELS=your_mongo_invited_channels_collection
 MONGODB_COLLECTION_USERS=your_mongo_user_collection
 ```
-* Provide a slack token from your slack boot. Create slack bot first, then you'll gonna get your api token from [slack](https://poipo.slack.com/services/B8AD8CBR8). Please put this token to .env also.
+* Provide a slack token from your slack boot. Create slack bot first, then you'll gonna get your api token from [slack](https://poipo.slack.com/services/B8AD8CBR8). Please put this token to .env file also.
 ```
 SLACK_API_TOKEN=xoxb-your_slack_api_token
 ```
@@ -59,7 +59,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://op
 
 ## Acknowledgments
 
-* TH assignment from [Teleo](www.teleo.co)
+* TH assignment from [Teleo](https://www.teleo.co/)
 * stackoverflow
 * Hat tip to anyone who's code was used
 * Inspiration
