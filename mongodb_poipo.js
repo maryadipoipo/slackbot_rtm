@@ -53,8 +53,8 @@ module.exports = {
             dbase.collection(process.env.MONGODB_COLLECTION_INVITED_CHANNELS)
                 .find(query)
                 .toArray(function(err, result) {
-                    console.log("handle_thanks_filter_mongo");
-                    console.log(result);
+                    // console.log("handle_thanks_filter_mongo");
+                    // console.log(result);
                     if(result[0].slack_channel_member_ids.length > 1) {
                         /** Check member is in group or not **/
                         if(result[0].slack_channel_member_ids.includes(thanked_slack_id)) {
@@ -66,53 +66,70 @@ module.exports = {
                                 .find(thanker_user_query)
                                 .toArray(function(err, res0) {
                                     if(res0[0].given_point > 0) {
-                                        // Give one point to thanked user
-                                        var thanked_user_query = {
-                                            slack_id : thanked_slack_id
-                                        };
-                                        dbase.collection(process.env.MONGODB_COLLECTION_USERS)
-                                        .find(thanked_user_query)
-                                        .toArray(function(err, res) {
-                                            var updated_total_point = res[0].total_point + 1;
-                                            var updated_point_today = res[0].received_point + 1;
-                                            var new_thanked_user_data = {
-                                                total_point: updated_total_point,
-                                                received_point: updated_point_today,
-                                                slack_team_id: obj_channel.team
-                                            };
-                                            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
-                                            .update(
-                                                thanked_user_query,
-                                                new_thanked_user_data,
-                                                function(err, res) {
-                                                    if (err) throw err;
-                                                    console.log("thanked user point has been added");
-                                                    console.log("slack_id : "+thanked_slack_id);
-                                                }
-                                            );
+                                        MongoClient.connect(url, function(err, db) {
+                                            if (err) throw err;
 
-                                            // Decrease one karma point from thanker
-                                            var new_thanker_user_data = {
-                                                given_point : res0[0].given_point - 1,
-                                                slack_team_id: obj_channel.team
+                                            var dbase = db.db(process.env.MONGODB_DATABASE);
+                                            // Give one point to thanked user
+                                            var thanked_user_query = {
+                                                slack_id : thanked_slack_id
                                             };
-                                            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
-                                            update(
-                                                thanker_user_query,
-                                                new_thanker_user_data,
-                                                function(err, res){
-                                                    if (err) throw err;
-                                                    console.log("thanker user point has been decreased");
-                                                    console.log("slack_id : "+obj_channel.user);
-                                                }
-                                            );
 
-                                            // Send success response
-                                            i_rtm.sendMessage(
-                                                res[0].slack_name+" receives 1 point from "+ res0[0].slack_name
-                                                +". He/She has "+updated_total_point+" points",
-                                                obj_channel.channel
-                                            );
+                                            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+                                            .find(thanked_user_query)
+                                            .toArray(function(err, res) {
+                                                console.log("thanked data");
+                                                console.log(res);
+                                                var updated_total_point = res[0].total_point + 1;
+                                                var updated_point_today = res[0].received_point + 1;
+                                                var new_thanked_user_data = {
+                                                    slack_id: res[0].slack_id,
+                                                    slack_name: res[0].slack_name,
+                                                    total_point: updated_total_point,
+                                                    received_point: updated_point_today,
+                                                    slack_team_id: obj_channel.team,
+                                                    given_point: res[0].given_point,
+                                                    is_deleted: false
+                                                };
+                                                dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+                                                .update(
+                                                    thanked_user_query,
+                                                    new_thanked_user_data,
+                                                    function(err, res) {
+                                                        if (err) throw err;
+                                                        console.log("thanked user point has been added");
+                                                        console.log("slack_id : "+thanked_slack_id);
+                                                    }
+                                                );
+
+                                                // Decrease one karma point from thanker
+                                                var new_thanker_user_data = {
+                                                    slack_id: res0[0].slack_id,
+                                                    slack_name: res0[0].slack_name,
+                                                    total_point: res0[0].total_point,
+                                                    received_point: res0[0].received_point,
+                                                    given_point : res0[0].given_point - 1,
+                                                    slack_team_id: obj_channel.team,
+                                                    is_deleted: false
+                                                };
+                                                dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+                                                .update(
+                                                    thanker_user_query,
+                                                    new_thanker_user_data,
+                                                    function(err, res){
+                                                        if (err) throw err;
+                                                        console.log("thanker user point has been decreased");
+                                                        console.log("slack_id : "+obj_channel.user);
+                                                    }
+                                                );
+                                                db.close();
+                                                // Send success response
+                                                i_rtm.sendMessage(
+                                                    res[0].slack_name+" receives 1 point from "+ res0[0].slack_name
+                                                    +". He/She has "+updated_total_point+" points",
+                                                    obj_channel.channel
+                                                );
+                                            });
                                         });
                                     }else {
                                         // Send response that given point is already null
@@ -135,6 +152,27 @@ module.exports = {
                                     res[0].slack_name+" is not yet in this channel. Please invite him/her to give a karma point",
                                     obj_channel.channel
                                 );
+
+
+                                MongoClient.connect(url, function(err, db) {
+                                    if (err) throw err;
+
+                                    var dbase = db.db(process.env.MONGODB_DATABASE);
+                                    dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+                                    .find(thanked_user_query)
+                                    .toArray(function(err, res) {
+                                        console.log("result resul result result");
+                                        console.log(res);
+                                    });
+
+                                    dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+                                    .find(thanked_user_query)
+                                    .toArray(function(err, res) {
+                                        console.log("result resul result result");
+                                        console.log(res);
+                                    });
+                                });
+
                             });
                         }
                         db.close();
