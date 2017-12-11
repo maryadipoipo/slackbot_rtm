@@ -42,7 +42,16 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
 rtm.on(RTM_EVENTS.MESSAGE, function(message) {
     console.log("MESSAGE");
     console.log(message);
-    commands_poipo.thanks_filter(rtm, message);
+    // Check message content
+    if(message.text.indexOf('<@U8AEJ3DGC> leaderboard') >= 0) {
+      // Show top 10 karma point
+      console.log("leaderboard detected...");
+      mongo_poipo.show_top_10_karma_users_point(rtm, message);
+
+    }else if(message.text.indexOf('thanks <@') >= 0){
+      // Check Thanks
+      commands_poipo.thanks_filter(rtm, message);
+    }
 });
 
 /*** For detecting DM ***/

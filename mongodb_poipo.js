@@ -60,7 +60,7 @@ module.exports = {
                             var thanker_user_query = {
                                 slack_id : obj_channel.user
                             };
-                            dbase.collection(MONGODB_COLLECTION_USERS)
+                            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
                                 .find(thanker_user_query)
                                 .toArray(function(err, res0) {
                                     if(res0.given_point > 0) {
@@ -68,7 +68,7 @@ module.exports = {
                                         var thanked_user_query = {
                                             slack_id : thanked_slack_id
                                         };
-                                        dbase.collection(MONGODB_COLLECTION_USERS)
+                                        dbase.collection(process.env.MONGODB_COLLECTION_USERS)
                                         .find(thanked_user_query)
                                         .toArray(function(err, res) {
                                             var updated_total_point = res.total_point + 1;
@@ -78,7 +78,7 @@ module.exports = {
                                                 received_point: updated_point_today,
                                                 slack_team_id: obj_channel.team
                                             };
-                                            dbase.collection(MONGODB_COLLECTION_USERS)
+                                            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
                                             .update(
                                                 thanked_user_query,
                                                 new_thanked_user_data,
@@ -91,10 +91,10 @@ module.exports = {
 
                                             // Decrease one karma point from thanker
                                             var new_thanker_user_data = {
-                                                given_point = res0.given_point - 1,
+                                                given_point : res0.given_point - 1,
                                                 slack_team_id: obj_channel.team
                                             };
-                                            dbase.collection(MONGODB_COLLECTION_USERS)
+                                            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
                                             update(
                                                 thanker_user_query,
                                                 new_thanker_user_data,
@@ -125,7 +125,7 @@ module.exports = {
                             var thanked_user_query = {
                                 slack_id : thanked_slack_id
                             };
-                            dbase.collection(MONGODB_COLLECTION_USERS)
+                            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
                             .find(thanked_user_query)
                             .toArray(function(err, res) {
                                 i_rtm.sendMessage(
@@ -158,23 +158,44 @@ module.exports = {
         })
     },
 
-    show_top_10:function(i_rtm, i_slack_team_id) {
-        MongoClient..connect(url, function(err, db){
+    show_top_10_karma_users_point: function(i_rtm, obj_message) {
+        /***
+        obj_message content example :
+            { type: 'message',
+              channel: 'C89JHLYNP',
+              user: 'U89MZ4PV2',
+              text: '<@U8AEJ3DGC> leaderboard', // This is the command
+              ts: '1512960670.000044',
+              source_team: 'T895HCY8H',
+              team: 'T895HCY8H'
+            }
+        ***/
+        MongoClient.connect(url, function(err, db){
             if (err) throw err;
 
             var dbase = db.db(process.env.MONGODB_DATABASE);
-            var query = {
-                slack_team_id: i_slack_team_id
-            }
 
-            dbase.collection(MONGODB_COLLECTION_USERS)
-            .find(query)
-            .sort({total_point: -1}) //Descending, 1 = Ascending
-            .limit(10)
-            .toArray(function(err, res){
+            // Check if karmabot_poipo is in the channel
+            dbase.collection(process.env.MONGODB_COLLECTION_INVITED_CHANNELS)
+                .find({slack_channel_id: obj_message.channel})
+                .toArray(function(err, result){
+                    if(result.length > 3) {
+                        console.log('boot is in this channel');
+                        dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+                        .find(query)
+                        .sort({total_point: -1}) //Descending, 1 = Ascending
+                        .limit(10)
+                        .toArray(function(err, res){
 
-            });
+                        });
+                    }
+                    console.log('boot is not in this channel');
+                });
         });
+    },
+
+    give_5_point_everyday: function() {
+
     }
 
 }
