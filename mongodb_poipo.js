@@ -162,12 +162,12 @@ module.exports = {
         /***
         obj_message content example :
             { type: 'message',
-              channel: 'C89JHLYNP',
+              channel: 'C89JHLYNP', // channel id
               user: 'U89MZ4PV2',
               text: '<@U8AEJ3DGC> leaderboard', // This is the command
               ts: '1512960670.000044',
               source_team: 'T895HCY8H',
-              team: 'T895HCY8H'
+              team: 'T895HCY8H' // team id
             }
         ***/
         MongoClient.connect(url, function(err, db){
@@ -179,17 +179,39 @@ module.exports = {
             dbase.collection(process.env.MONGODB_COLLECTION_INVITED_CHANNELS)
                 .find({slack_channel_id: obj_message.channel})
                 .toArray(function(err, result){
-                    if(result.length > 3) {
+                    if(result[0].slack_channel_id.length > 3) {
                         console.log('boot is in this channel');
                         dbase.collection(process.env.MONGODB_COLLECTION_USERS)
-                        .find(query)
+                        .find({slack_team_id: obj_message.team})
                         .sort({total_point: -1}) //Descending, 1 = Ascending
                         .limit(10)
                         .toArray(function(err, res){
+                            if(res.length > 0) {
+                                res1 = [];
+                                res.forEach(function(item) {
+                                    temp = {
+                                        name : item.slack_name,
+                                        point : item.total_point
+                                    }
+                                    res1.push(temp);
+                                });
+                                i_rtm.sendMessage(
+                                    res1,
+                                    obj_message.channel
+                                    );
 
+                            }else {
+                                i_rtm.sendMessage(
+                                    'There are no top user yet in your team :)',
+                                    obj_message.channel
+                                );
+                            }
+                            db.close();
                         });
+                    } else {
+                        console.log('boot is not in this channel');
                     }
-                    console.log('boot is not in this channel');
+
                 });
         });
     },
