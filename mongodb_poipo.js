@@ -43,6 +43,7 @@ module.exports = {
                     .insertOne(new_team_data, function(err, res) {
                         if (err) throw err;
                         console.log("new team inserted successfully : "+slack_team_id);
+                        db.close();
                     });
                 }
              });
@@ -93,6 +94,7 @@ module.exports = {
                     .insertOne(new_member_data, function(err, res) {
                         if (err) throw err;
                         console.log("new team member inserted successfully : "+obj_member.id);
+                        db.close();
                     });
                 }
              });

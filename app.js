@@ -107,7 +107,7 @@ rtm.on(RTM_EVENTS.IM_OPEN, function(message) {
 });
 
 
-/*** The first time boot joined a new channel ***/
+/*** The first time boot joined a new channel ===== ***/
 rtm.on(RTM_EVENTS.CHANNEL_JOINED, function(message) {
     console.log("CHANNEL_JOINED");
     console.log(message);
