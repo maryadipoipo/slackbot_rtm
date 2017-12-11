@@ -9,9 +9,9 @@ var url = "mongodb://"
           +"@ds129936.mlab.com:29936/"
           +process.env.MONGODB_DATABASE;
 
-function add_new_invited_channel (dbase, new_obj_channel) {
+function add_new_invited_channel (dbase, slack_team_id, new_obj_channel) {
     var new_channel_data = {
-        slack_team_id : 0, // not yet used
+        slack_team_id : slack_team_id,
         slack_channel_id : new_obj_channel.id,
         slack_channel_name : new_obj_channel.name,
         slack_channel_member_ids : new_obj_channel.members,
@@ -25,7 +25,30 @@ function add_new_invited_channel (dbase, new_obj_channel) {
 }
 
 module.exports = {
-    check_invited_channels: function(obj_channel) {
+    check_slack_team: function(slack_team_id, slack_team_name) {
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+
+            var dbase = db.db(process.env.MONGODB_DATABASE);
+            dbase.collection(process.env.MONGODB_COLLECTION_TEAMS)
+             .find({slack_team_id: slack_team_id})
+             .toArray(function(err, result) {
+                if(result.length < 1) {
+                    // Add this new team
+                    var new_team_data = {
+                        slack_team_id: slack_team_id,
+                        slack_team_name: slack_team_name
+                    };
+                    dbase.collection(process.env.MONGODB_COLLECTION_TEAMS)
+                    .insertOne(new_team_data, function(err, res) {
+                        if (err) throw err;
+                        console.log("new team inserted successfully : "+slack_team_id);
+                    });
+                }
+             });
+        });
+    },
+    check_invited_channels: function(slack_team_id, obj_channel) {
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
 
@@ -37,11 +60,43 @@ module.exports = {
                 .toArray(function(err, result) {
                     if(result.length < 1) {
                         /** Add this new invited channel **/
-                        add_new_invited_channel(dbase, obj_channel);
+                        add_new_invited_channel(dbase, slack_team_id, obj_channel);
                         db.close();
                     }
                 });
         })
+    },
+    check_team_members: function(slack_team_id, obj_member){
+        MongoClient.connect(url, function(err, db) {
+            if (err) throw err;
+
+            var dbase = db.db(process.env.MONGODB_DATABASE);
+            var query = {
+                slack_team_id: slack_team_id,
+                slack_id: obj_member.id
+            };
+            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+             .find(query)
+             .toArray(function(err, result) {
+                if(result.length < 1) {
+                    // Add this new team
+                    var new_member_data = {
+                        slack_id: obj_member.id,
+                        slack_name: obj_member.real_name,
+                        total_point: 0,
+                        received_point: 0,
+                        slack_team_id: slack_team_id,
+                        given_point: 0,
+                        is_deleted: false
+                    };
+                    dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+                    .insertOne(new_member_data, function(err, res) {
+                        if (err) throw err;
+                        console.log("new team member inserted successfully : "+obj_member.id);
+                    });
+                }
+             });
+        });
     },
     handle_thanks_filter_mongo: function(i_rtm, obj_channel, thanked_slack_id) {
         MongoClient.connect(url, function(err, db) {

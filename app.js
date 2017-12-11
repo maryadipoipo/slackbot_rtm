@@ -19,12 +19,23 @@ rtm.start();
 /*** Listening RTM EVENT from SLACK ***/
 let channel_id;
 rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
+
+  // Check Team
+  mongo_poipo.check_slack_team(rtmStartData.team.id, rtmStartData.team.name);
+
+  // Check Channels
   for (const channel of rtmStartData.channels) {
       if (channel.is_member && !channel.is_archived) {
   		  channel_id = channel.id
-        mongo_poipo.check_invited_channels(channel);
+        mongo_poipo.check_invited_channels(rtmStartData.team.id, channel);
   	  }
   }
+
+  // Check Team Members
+  for(const member of rtmStartData.users) {
+     mongo_poipo.check_team_members(rtmStartData.team.id, member);
+  }
+
   console.log(`Logged in as ${rtmStartData.self.name} of team ${rtmStartData.team.name}`);
 
   /*** Running cron job at 00:00 ***/
@@ -33,11 +44,13 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
 /***************************************/
 
 
-// SKIPPED FOR NOW
-// rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function () {
-//    if(channel_id != 'undefined') {
-// 		rtm.sendMessage("Hello! Semuanya..ehehe...Sy baru OL lagi nih... :)", channel_id);
-//    }
+// // SKIPPED FOR NOW
+// rtm.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, (message) => {
+//   //  if(channel_id != 'undefined') {
+// 		// rtm.sendMessage("Hello! Semuanya..ehehe...Sy baru OL lagi nih... :)", channel_id);
+//   //  }
+//   console.log("RTM_CONNECTION_OPENED ");
+//   console.log(message);
 // });
 
 
