@@ -1,6 +1,9 @@
 # slackbot_rtm
 playing with slack bot rtm using node.js and mongodb
 
+## Aplication Demo
+Please take a look at the video demo for this [link](https://www.youtube.com/watch?v=q8ykUHsANSw)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
