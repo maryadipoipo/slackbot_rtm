@@ -22,6 +22,7 @@ Please take a look at the video demo for this [link](https://www.youtube.com/wat
     * slack_team_id
     * slack_team_name
     * is_deleted (default false)
+    
   Data Example
      {
         "_id": {
@@ -30,6 +31,7 @@ Please take a look at the video demo for this [link](https://www.youtube.com/wat
         "slack_team_id": "T895HCY8H",
         "slack_team_name": "poipo"
     }
+    
 * Invited Channels Collection consists of :
     * _id (automatically added by mongo db)
     * slack_team_id
@@ -37,6 +39,7 @@ Please take a look at the video demo for this [link](https://www.youtube.com/wat
     * slack_channel_name
     * slack_channel_member_ids
     * is_deleted (default false)
+    
   Data Example :
     {
         "_id": {
@@ -51,6 +54,7 @@ Please take a look at the video demo for this [link](https://www.youtube.com/wat
         ],
         "is_deleted": false
     }
+    
 * Channel Team Members Collection consists of :
     * _id (automaticall added by mongo db)
     * slack_id
@@ -60,6 +64,7 @@ Please take a look at the video demo for this [link](https://www.youtube.com/wat
     * given_point (remaining point that can be given. If it's null this user can't give point anymore)
     * slack_team_id (this is used for getting top 10 users karma point)
     * is_deleted (default false)
+    
   Data Example :
     {
         "_id": {
