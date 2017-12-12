@@ -24,6 +24,30 @@ function add_new_invited_channel (dbase, slack_team_id, new_obj_channel) {
         });
 }
 
+function give_and_update_5_points(obj_member) {
+    MongoClient.connect(url, function(err, db) {
+        if (err) throw err;
+
+        var query = {slack_id: obj_member.slack_id};
+        var new_point = {
+            slack_id: obj_member.slack_id,
+            slack_name: obj_member.slack_name,
+            total_point: obj_member.total_point,
+            received_point: 0, // reset to null again because it's a new day
+            given_point: 5,
+            slack_team_id: obj_member.slack_team_id,
+            is_deleted: obj_member.is_deleted
+        };
+        var dbase = db.db(process.env.MONGODB_DATABASE);
+        dbase.collection(process.env.MONGODB_COLLECTION_USERS)
+            .update(query, new_point, function(err, res) {
+                if (err) throw err;
+                console.log("give 5 points completed. team member id : "+obj_member.slack_id);
+                db.close();
+            });
+    });
+}
+
 module.exports = {
     check_slack_team: function(slack_team_id, slack_team_name) {
         MongoClient.connect(url, function(err, db) {
@@ -353,31 +377,12 @@ module.exports = {
             if (err) throw err;
 
             var dbase = db.db(process.env.MONGODB_DATABASE);
-            dbase.collection(process.env.MONGODB_COLLECTION_USERS_TEST)
+            dbase.collection(process.env.MONGODB_COLLECTION_USERS)
             .find() // find all data in collection
             .toArray(function(err, result) {
-                console.log("give 5 point");
+                db.close();
                 for(i = 0; i< result.length; i++) {
-                    var query = {slack_id: result[i].slack_id};
-                    var new_point = {
-                        slack_id: result[i].slack_id,
-                        slack_name: result[i].slack_name,
-                        total_point: result[i].total_point,
-                        received_point: result[i].received_point,
-                        //given_point: result[i].given_point-1,
-                        given_point: 5,
-                        slack_team_id: result[i].slack_team_id,
-                        is_deleted: result[i].is_deleted
-                    };
-                    dbase.collection(process.env.MONGODB_COLLECTION_USERS_TEST)
-                        .update(query, new_point, function(err, res) {
-                            if (err) throw err;
-                            console.log("data has been updated");
-                            //console.log(res);
-                        });
-                    if(i == result.length-1) {
-                        db.close();
-                    }
+                    give_and_update_5_points(result[i]);
                 }
             });
         });

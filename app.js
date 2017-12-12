@@ -40,6 +40,7 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
 
   /*** Running cron job at 00:00 ***/
   cron_poipo.give_5_points_cron();
+  //cron_poipo.test_everysecond();
 });
 /***************************************/
 
