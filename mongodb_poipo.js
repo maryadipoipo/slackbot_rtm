@@ -134,8 +134,6 @@ module.exports = {
             dbase.collection(process.env.MONGODB_COLLECTION_INVITED_CHANNELS)
                 .find(query)
                 .toArray(function(err, result) {
-                    // console.log("handle_thanks_filter_mongo");
-                    // console.log(result);
                     if(result[0].slack_channel_member_ids.length > 1) {
                         /** Check member is in group or not **/
                         if(result[0].slack_channel_member_ids.includes(thanked_slack_id)) {
@@ -222,6 +220,7 @@ module.exports = {
                                 });
                         }else {
                             console.log("user is not in group yet");
+                            console.log(thanked_slack_id);
                             // Send response that thanked user is not in the channel
                             var thanked_user_query = {
                                 slack_id : thanked_slack_id
@@ -229,31 +228,13 @@ module.exports = {
                             dbase.collection(process.env.MONGODB_COLLECTION_USERS)
                             .find(thanked_user_query)
                             .toArray(function(err, res) {
-                                i_rtm.sendMessage(
-                                    res[0].slack_name+" is not yet in this channel. Please invite him/her to give a karma point",
-                                    obj_channel.channel
-                                );
-
-
-                                MongoClient.connect(url, function(err, db) {
-                                    if (err) throw err;
-
-                                    var dbase = db.db(process.env.MONGODB_DATABASE);
-                                    dbase.collection(process.env.MONGODB_COLLECTION_USERS)
-                                    .find(thanked_user_query)
-                                    .toArray(function(err, res) {
-                                        console.log("result resul result result");
-                                        console.log(res);
-                                    });
-
-                                    dbase.collection(process.env.MONGODB_COLLECTION_USERS)
-                                    .find(thanked_user_query)
-                                    .toArray(function(err, res) {
-                                        console.log("result resul result result");
-                                        console.log(res);
-                                    });
-                                });
-
+                                console.log(res[0]);
+                                if(res.length > 0) {
+                                    i_rtm.sendMessage(
+                                        res[0].slack_name+" is not yet in this channel. Please invite him/her to give a karma point",
+                                        obj_channel.channel
+                                    );
+                                }
                             });
                         }
                         db.close();

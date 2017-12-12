@@ -7,7 +7,9 @@ module.exports = {
 
         raw_names.forEach(function (item){
             var temp = item.split(" ");
+            console.log("temp : "+temp);
             var temp1 = item.split(">");
+            console.log("temp1 : "+temp1);
             if(temp1[0].length > 3) {
                 // Check invited_channel first
                 console.log("thanked slack id : "+temp1[0]);
