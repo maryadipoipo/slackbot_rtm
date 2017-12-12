@@ -24,13 +24,15 @@ Please take a look at the video demo for this [link](https://www.youtube.com/wat
     * is_deleted (default false)
     
   Data Example
-     ```{
+     ```
+     {
         "_id": {
             "$oid": "5a2e62a2badb6c23ac1e9eea"
         },
         "slack_team_id": "T895HCY8H",
         "slack_team_name": "poipo"
-    }```
+    }
+    ```
     
 * Invited Channels Collection consists of :
     * _id (automatically added by mongo db)
@@ -41,7 +43,8 @@ Please take a look at the video demo for this [link](https://www.youtube.com/wat
     * is_deleted (default false)
     
   Data Example :
-    ```{
+    ```
+    {
         "_id": {
             "$oid": "5a2e62a1badb6c23ac1e9ee8"
         },
@@ -53,7 +56,8 @@ Please take a look at the video demo for this [link](https://www.youtube.com/wat
             "U8AEJ3DGC"
         ],
         "is_deleted": false
-    }```
+    }
+    ```
     
 * Channel Team Members Collection consists of :
     * _id (automaticall added by mongo db)
@@ -66,7 +70,8 @@ Please take a look at the video demo for this [link](https://www.youtube.com/wat
     * is_deleted (default false)
     
   Data Example :
-    ```{
+    ```
+    {
         "_id": {
             "$oid": "5a2e62a2badb6c23ac1e9ee9"
         },
@@ -77,7 +82,8 @@ Please take a look at the video demo for this [link](https://www.youtube.com/wat
         "given_point": 3,
         "slack_team_id": "T895HCY8H",
         "is_deleted": false
-    }```
+    }
+    ```
 ## Flow Chart
     will be added later.
 
