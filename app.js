@@ -97,7 +97,7 @@ rtm.on(RTM_EVENTS.MESSAGE, function(message) {
 
     // Detecting new team member when joining channel
     if(message.hasOwnProperty('subtype') && message.subtype == 'channel_join') {
-      mongodb_poipo.add_new_invited_member_to_channel(message);
+      mongo_poipo.add_new_invited_member_to_channel(message);
     }
 
 });

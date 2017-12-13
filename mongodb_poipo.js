@@ -379,7 +379,7 @@ module.exports = {
             .toArray(function(err, result){
                 db.close();
                 if(result.length > 0){
-                    if(!result.slack_channel_member_ids.includes(obj_message.user)) {
+                    if(!result[0].slack_channel_member_ids.includes(obj_message.user)) {
                         // var new_member_ids = result.slack_channel_member_ids
                         //                         .concat([obj_message.user]);
                         MongoClient.connect(url, function(err, db){
