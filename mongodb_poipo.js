@@ -367,6 +367,39 @@ module.exports = {
                 }
             });
         });
+    },
+
+    add_new_invited_member_to_channel: function(obj_message) {
+        MongoClient.connect(url, function(err, db) {
+            if(err) throw err;
+
+            var dbase = db.db(process.env.MONGODB_DATABASE);
+            dbase.collection(process.env.MONGODB_COLLECTION_INVITED_CHANNELS)
+            .find({slack_channel_id: obj_message.channel})
+            .toArray(function(err, result){
+                db.close();
+                if(result.length > 0){
+                    if(!result.slack_channel_member_ids.includes(obj_message.user)) {
+                        // var new_member_ids = result.slack_channel_member_ids
+                        //                         .concat([obj_message.user]);
+                        MongoClient.connect(url, function(err, db){
+                            if(err) throw err;
+                            var dbase = db.db(process.env.MONGODB_DATABASE);
+                            dbase.collection(process.env.MONGODB_COLLECTION_INVITED_CHANNELS)
+                            .update(
+                                {slack_channel_id: obj_message.channel},
+                                {$addToSet:{slack_channel_member_ids:obj_message.user}},
+                                function(err, res){
+                                    if(err) throw err;
+                                    console.log(" new channel member successfully added");
+                                    db.close();
+                                }
+                            );
+                        });
+                    }
+                }
+            });
+        });
     }
 
 }

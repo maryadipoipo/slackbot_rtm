@@ -57,13 +57,14 @@ rtm.on(CLIENT_EVENTS.RTM.AUTHENTICATED, (rtmStartData) => {
 
 /*** For detecting message in channel, DM, and GM ***/
 rtm.on(RTM_EVENTS.MESSAGE, function(message) {
-    console.log("MESSAGE");
+    console.log("*********** MESSAGE ************");
     console.log(message);
+    console.log("*********************************");
     switch(message.channel.charAt(0)) {
       case 'C':
         //Public channel
         // Check message content
-        if(message.text.indexOf(/*<@U8AEJ3DGC*/'> leaderboard') >= 0) { // THIS IS SHOULD BE CHANGED LATER
+        if(message.text.indexOf('<@U8AEJ3DGC> leaderboard') >= 0) { // THIS IS SHOULD BE CHANGED LATER
           // Show top 10 karma point
           console.log("leaderboard detected...");
           mongo_poipo.show_top_10_karma_users_point(rtm, message);
@@ -94,6 +95,11 @@ rtm.on(RTM_EVENTS.MESSAGE, function(message) {
       default: //Just do nothing
     }
 
+    // Detecting new team member when joining channel
+    if(message.hasOwnProperty('subtype') && message.subtype == 'channel_join') {
+      mongodb_poipo.add_new_invited_member_to_channel(message);
+    }
+
 });
 
 /*** For detecting DM ***/
@@ -110,27 +116,27 @@ rtm.on(RTM_EVENTS.IM_OPEN, function(message) {
 
 /*** The first time boot joined a new channel ===== ***/
 rtm.on(RTM_EVENTS.CHANNEL_JOINED, function(message) {
-    console.log("CHANNEL_JOINED");
+    console.log("*************** CHANNEL_JOINED ***************");
     console.log(message);
 });
 
 
-/*** The first time boot/member joined a new channel ***/
+/*** The first time boot/member joined the team ***/
 rtm.on(RTM_EVENTS.MEMBER_JOINED_CHANNEL, function(message) {
-    console.log("MEMBER_JOINED_CHANNEL");
+    console.log("************ MEMBER_JOINED_CHANNEL *************");
     console.log(message);
 });
 
-/*** The first time boot/member joined a new channel ***/
+/*** The first time boot/member joined joined the team ***/
 rtm.on(RTM_EVENTS.TEAM_JOIN, function(message) {
-    console.log("TEAM_JOIN");
+    console.log("********* TEAM_JOIN *************");
     console.log(message);
 });
 
 
 /*** The first time boot/member left a new channel ***/
 rtm.on(RTM_EVENTS.MEMBER_LEFT_CHANNEL, function(message) {
-    console.log("MEMBER_LEFT_CHANNEL");
+    console.log("******** MEMBER_LEFT_CHANNEL**********");
     console.log(message);
 });
 
