@@ -18,7 +18,7 @@ var bodyParser = require('body-parser');
 
 
 var rtm = new rtmClient(process.env.SLACK_API_TOKEN);
-rtm.start();
+//rtm.start();
 
 /*** Listening RTM EVENT from SLACK ***/
 let channel_id;
