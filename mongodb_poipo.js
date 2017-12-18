@@ -1,7 +1,6 @@
-//var my_env = require('node-env-file');
 var MongoClient = require('mongodb').MongoClient;
 
-//my_env(__dirname+'/.env');
+
 var url = "mongodb://"
           +process.env.MONGODB_USER
           +":"
