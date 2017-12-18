@@ -204,7 +204,19 @@ app.get('/', function (req, res) {
 
 
 
-
+app.post('/poipo', function (req, res, next) {
+  console.log(req.body);
+  var userName = req.body.user_name;
+  var botPayload = {
+    text : 'Hello ' + userName + ', You are using poiposlackbot eeaa'
+  };
+  // Loop otherwise..
+  if (userName !== 'slackbot') {
+    return res.status(200).json(botPayload);
+  } else {
+    return res.status(200).end();
+  }
+});
 
 
 
