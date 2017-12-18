@@ -1,7 +1,7 @@
 var rtmClient = require('@slack/client').RtmClient;
 var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
-var my_env = require('node-env-file');
+//var my_env = require('node-env-file');
 var mongo_poipo = require('./mongodb_poipo');
 var commands_poipo = require('./karma_poipo_commands');
 var cron_poipo = require('./cron_poipo');
@@ -12,7 +12,7 @@ var bodyParser = require('body-parser');
 
 
 /*** Load ENV ***/
-my_env(__dirname+'/.env');
+//my_env(__dirname+'/.env');
 //console.log(process.env.SLACK_API_TOKEN);
 /*********************/
 
