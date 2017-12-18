@@ -186,7 +186,7 @@ app.listen(port, function () {
 
 
 // test route
-app.get('/home', function (req, res) {
+app.get('/', function (req, res) {
   //console.log(req);
   //res.writeHead(200, {'Content-TYpe': 'text/html'});
    // res.write(`<h1>Hellow There...</h1><br /><br />Thanks for visiting... :) <br><br>
