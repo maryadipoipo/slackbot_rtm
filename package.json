@@ -27,7 +27,6 @@
     "express": "^4.16.2",
     "foreman": "^2.0.0",
     "mongodb": "^3.0.0-rc0",
-    "node-env-file": "^0.1.8",
     "routes": "^2.1.0"
   }
 }
