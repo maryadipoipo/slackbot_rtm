@@ -4,7 +4,11 @@ var RTM_EVENTS = require('@slack/client').RTM_EVENTS;
 var my_env = require('node-env-file');
 var mongo_poipo = require('./mongodb_poipo');
 var commands_poipo = require('./karma_poipo_commands');
-var cron_poipo = require('./cron_poipo')
+var cron_poipo = require('./cron_poipo');
+var express = require('express');
+var router = require('routes');
+var bodyParser = require('body-parser');
+
 
 
 /*** Load ENV ***/
@@ -114,6 +118,12 @@ rtm.on(RTM_EVENTS.IM_OPEN, function(message) {
 });
 
 
+/*** The first time boot/member joined joined the team ***/
+rtm.on(RTM_EVENTS.TEAM_JOIN, function(message) {
+    console.log("********* TEAM_JOIN *************");
+    console.log(message);
+});
+
 /*** The first time boot joined a new channel ===== ***/
 rtm.on(RTM_EVENTS.CHANNEL_JOINED, function(message) {
     console.log("*************** CHANNEL_JOINED ***************");
@@ -121,15 +131,27 @@ rtm.on(RTM_EVENTS.CHANNEL_JOINED, function(message) {
 });
 
 
-/*** The first time boot/member joined the team ***/
-rtm.on(RTM_EVENTS.MEMBER_JOINED_CHANNEL, function(message) {
-    console.log("************ MEMBER_JOINED_CHANNEL *************");
+rtm.on(RTM_EVENTS.CHANNEL_LEFT, function(message) {
+    console.log("CHANNEL_LEFT");
     console.log(message);
 });
 
-/*** The first time boot/member joined joined the team ***/
-rtm.on(RTM_EVENTS.TEAM_JOIN, function(message) {
-    console.log("********* TEAM_JOIN *************");
+
+rtm.on(RTM_EVENTS.CHANNEL_DELETED, function(message) {
+    console.log("CHANNEL_DELETED");
+    console.log(message);
+});
+
+
+rtm.on(RTM_EVENTS.CHANNEL_ARCHIVE, function(message) {
+    console.log("CHANNEL_ARCHIVE");
+    console.log(message);
+});
+
+
+/*** The first time boot/member joined the team ***/
+rtm.on(RTM_EVENTS.MEMBER_JOINED_CHANNEL, function(message) {
+    console.log("************ MEMBER_JOINED_CHANNEL *************");
     console.log(message);
 });
 
@@ -148,16 +170,11 @@ rtm.on(RTM_EVENTS.BOT_ADDED, function(message) {
 });
 
 
-/*** BOT_ADDED ***/
-rtm.on(RTM_EVENTS.CHANNEL_ARCHIVE, function(message) {
-    console.log("CHANNEL_ARCHIVE");
-    console.log(message);
-});
 
 
 
 
 
-//mongo_poipo.get_remain_karma_points(1);
+
 
 
