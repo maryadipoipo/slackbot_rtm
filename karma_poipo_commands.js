@@ -166,24 +166,25 @@ function initialize_rtm(bot_token){
     console.log("......RTM STARTED....");
 };
 
+function thanks_filter (i_rtm, obj_message){
+    var arr = [];
+    var raw_names = obj_message.text.split("thanks <@");
+
+    raw_names.forEach(function (item){
+        var temp = item.split(" ");
+        console.log("temp : "+temp);
+        var temp1 = item.split(">");
+        console.log("temp1 : "+temp1);
+        if(temp1[0].length > 3) {
+            // Check invited_channel first
+            console.log("thanked slack id : "+temp1[0]);
+            mongo_poipo.handle_thanks_filter_mongo(i_rtm, obj_message, temp1[0]);
+        }
+    });
+};
+
+
 module.exports = {
-    thanks_filter: function(i_rtm, obj_message) {
-        var arr = [];
-        var raw_names = obj_message.text.split("thanks <@");
-
-        raw_names.forEach(function (item){
-            var temp = item.split(" ");
-            console.log("temp : "+temp);
-            var temp1 = item.split(">");
-            console.log("temp1 : "+temp1);
-            if(temp1[0].length > 3) {
-                // Check invited_channel first
-                console.log("thanked slack id : "+temp1[0]);
-                mongo_poipo.handle_thanks_filter_mongo(i_rtm, obj_message, temp1[0]);
-            }
-        });
-    },
-
     poipo_oauth_acess: function(i_code) {
         var m_body = {
             client_id : process.env.SLACK_CLIENT_ID,
