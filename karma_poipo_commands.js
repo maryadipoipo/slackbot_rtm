@@ -46,7 +46,7 @@ module.exports = {
 
             console.log("Team Name : "+ data.team_name);
             console.log("Team Name : "+ data.team_name);
-            console.log("bot id : "_data.bot.bot_user_id);
+            console.log("bot id : "+data.bot.bot_user_id);
         });
     }
 }
