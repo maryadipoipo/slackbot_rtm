@@ -24,7 +24,7 @@ module.exports = {
         var m_body = {
             client_id : process.env.SLACK_CLIENT_ID,
             clint_secret: process.env.SLACK_CLIENT_SECRET,
-            code:code
+            code:i_code
         };
         var m_body_form_data = querystring.stringify(m_body);
         poipo_request({
