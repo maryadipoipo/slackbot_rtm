@@ -26,6 +26,10 @@ module.exports = {
             clint_secret: process.env.SLACK_CLIENT_SECRET,
             code:i_code
         };
+
+        console.log("m_body : ");
+        console.log(m_body);
+
         var m_body_form_data = querystring.stringify(m_body);
         poipo_request({
             headers: {
@@ -37,6 +41,7 @@ module.exports = {
             method:'post'
         }, function(err, res, body){
             var data = JSON.parse(body, true);
+            console.log("response body : ");
             console.log(data);
         });
     }
