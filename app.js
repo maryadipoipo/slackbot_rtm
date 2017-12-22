@@ -207,6 +207,31 @@ app.get('/', function (req, res) {
 );
 
 
+app.get('/privacy-policy', function (req, res) {
+    res.status(200).send(`<h1>Hellow There...</h1><br /><br />Thanks for visiting... :) <br><br>
+         This page is privacy-policy of karmabot_poipo<br><br>
+         It's still under development... :)
+
+     `);
+    console.log("privacy-policy viewed");
+    res.end();
+  }
+);
+
+
+app.get('/support', function (req, res) {
+    res.status(200).send(`<h1>Hellow There...</h1><br /><br />Thanks for visiting... :) <br><br>
+         This page is support page of karmabot_poipo<br><br>
+         It's still under development... :)<br>
+         So if you have any questions or need any help. Please email me at hyosoka187@gmail.com
+
+     `);
+    console.log("privacy-policy viewed");
+    res.end();
+  }
+);
+
+
 
 app.post('/poipo', function (req, res, next) {
   console.log(req.body);
