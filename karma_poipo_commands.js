@@ -47,7 +47,7 @@ function initialize_rtm(bot_token){
           case 'C':
             //Public channel
             // Check message content
-            if(message.text.indexOf('<@U8AEJ3DGC> leaderboard') >= 0) { // THIS IS SHOULD BE CHANGED LATER
+            if(message.text.indexOf('<@U8C5EHQ4R> leaderboard') >= 0) { // THIS IS SHOULD BE CHANGED LATER
               // Show top 10 karma point
               console.log("leaderboard detected...");
               mongo_poipo.show_top_10_karma_users_point(rtm, message);
