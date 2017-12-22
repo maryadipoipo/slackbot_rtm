@@ -163,6 +163,7 @@ function initialize_rtm(bot_token){
 
 
     rtm.start();
+    console.log("......RTM STARTED....");
 };
 
 module.exports = {
@@ -211,6 +212,7 @@ module.exports = {
             console.log("Team Name : "+ data.team_name);
             console.log("bot id : "+data.bot.bot_user_id);
 
+            initialize_rtm(data.bot.bot_access_token);
         });
     }
 }
