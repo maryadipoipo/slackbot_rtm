@@ -23,7 +23,7 @@ module.exports = {
     poipo_oauth_acess: function(i_code) {
         var m_body = {
             client_id : process.env.SLACK_CLIENT_ID,
-            clint_secret: process.env.SLACK_CLIENT_SECRET,
+            client_secret: process.env.SLACK_CLIENT_SECRET,
             code:i_code
         };
 
