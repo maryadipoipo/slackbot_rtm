@@ -1,4 +1,6 @@
 var mongo_poipo = require('./mongodb_poipo');
+var poipo_request = require('request'),
+querystring = require('querystring');
 
 module.exports = {
     thanks_filter: function(i_rtm, obj_message) {
@@ -15,6 +17,26 @@ module.exports = {
                 console.log("thanked slack id : "+temp1[0]);
                 mongo_poipo.handle_thanks_filter_mongo(i_rtm, obj_message, temp1[0]);
             }
+        });
+    },
+
+    poipo_oauth_acess: function(i_code) {
+        var m_body = {
+            client_id : process.env.SLACK_CLIENT_ID,
+            clint_secret: process.env.SLACK_CLIENT_SECRET,
+            code:code
+        };
+        var m_body_form_data = querystring.stringify(m_body);
+        poipo_request({
+            headers: {
+                'Content-Type' : 'application/x-www-form-urlencoded',
+                //'Authorization' : 'Bearer '+process.env.SLACK_LEGACY_TOKEN
+            },
+            body: m_body_form_data,
+            uri:'https://slack.com/api/oauth.access',
+            method:'post'
+        }, function(err, res, body){
+            console.log(body);
         });
     }
 }

@@ -13,7 +13,7 @@ var url = require('url');
 
 
 var rtm = new rtmClient(process.env.SLACK_API_TOKEN);
-rtm.start();
+//rtm.start();
 
 /*** Listening RTM EVENT from SLACK ***/
 let channel_id;
@@ -194,6 +194,15 @@ app.get('/', function (req, res) {
    //  `);
    //res.write("Hellow write");
     //res.status(200).send('Hello world!');
+
+    var url_contents = url.parse(req.url, true);
+    if(typeof(url_contents.query.code) != 'undefined') {
+      console.log(url_contents.query.code);
+      commands_poipo.poipo_oauth_acess(url_contents.query.code);
+    }
+
+    //console.log("state : "+url_contents.Url.query.state);
+
     res.status(200).send(`<h1>Hellow There...</h1><br /><br />Thanks for visiting... :) <br><br>
          <a href="https://slack.com/oauth/authorize?scope=bot&client_id=281187440289.284693862498">
            <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png"

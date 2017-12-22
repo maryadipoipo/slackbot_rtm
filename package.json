@@ -27,6 +27,8 @@
     "express": "^4.16.2",
     "foreman": "^2.0.0",
     "mongodb": "^3.0.0-rc0",
+    "querystring": "^0.2.0",
+    "request": "^2.83.0",
     "routes": "^2.1.0",
     "url": "^0.11.0"
   }
