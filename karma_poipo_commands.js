@@ -36,7 +36,8 @@ module.exports = {
             uri:'https://slack.com/api/oauth.access',
             method:'post'
         }, function(err, res, body){
-            console.log(body);
+            var data = JSON.parse(body, true);
+            console.log(data);
         });
     }
 }
