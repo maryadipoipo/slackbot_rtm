@@ -43,6 +43,10 @@ module.exports = {
             var data = JSON.parse(body, true);
             console.log("response body : ");
             console.log(data);
+
+            console.log("Team Name : "+ data.team_name);
+            console.log("Team Name : "+ data.team_name);
+            console.log("bot id : "_data.bot.bot_user_id);
         });
     }
 }
