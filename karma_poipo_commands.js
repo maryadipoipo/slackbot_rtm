@@ -54,7 +54,7 @@ function initialize_rtm(bot_token){
 
             }else if(message.text.indexOf('thanks <@') >= 0){
               // Check Thanks
-              commands_poipo.thanks_filter(rtm, message);
+              thanks_filter(rtm, message);
             }
           break;
           case 'D':
